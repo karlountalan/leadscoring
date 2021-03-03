@@ -119,7 +119,7 @@ def preprocess_df(df):
 
       finally:
         coords2.append(str(lat)+', '+str(lon))
-        print('rows remaining for getting coords: '+str(len(df)-ctr))
+        #print('rows remaining for getting coords: '+str(len(df)-ctr))
         ctr+=1
 
     df['address_coordinates'] = coords
@@ -230,6 +230,8 @@ def get_pred(data):
 
     try:
         model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
+        print(model)
+        print(pid)
     except Exception as E:
         return JsonResponse({'estimated_payout':payout}, safe=True)
 
