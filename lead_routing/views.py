@@ -230,8 +230,6 @@ def get_pred(data):
 
     try:
         model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
-        print(model)
-        print(pid)
     except Exception as E:
         return JsonResponse({'estimated_payout':payout}, safe=True)
 
