@@ -230,7 +230,7 @@ def get_pred(data):
     try:
         model = joblib.load(settings.BASE_DIR+'/models/model_'+str(pid)+'.pkl')
     except Exception as E:
-        return JsonResponse({'estimated_payout':E}, safe=True)
+        return JsonResponse({'estimated_payout':str(E)}, safe=True)
 
     feats = ['region','move_from_type','move_to_type','move_size','interstate','form_post_attempts','user_id',
                   'distance','days_away_from_move','move_date < date','move_date_month','move_date_week',
