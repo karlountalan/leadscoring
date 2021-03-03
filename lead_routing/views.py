@@ -226,12 +226,13 @@ def get_pred(data):
     df_pred = preprocess_df(df)
     pid = df_pred['ping_partner_id'][0]
     payout = float(df_pred['ping_payout'][0])
-    print(os.getcwd())
+    from django.conf import settings
+    print(settings.SITE_ROOT)
 
     try:
         model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
     except Exception as E:
-        return JsonResponse({'estimated_payout':str(os.path.abspath(os.path.dirname(__name__)))}, safe=True)
+        return JsonResponse({'estimated_payout':str(settings.SITE_ROOT)}, safe=True)
 
     feats = ['region','move_from_type','move_to_type','move_size','interstate','form_post_attempts','user_id',
                   'distance','days_away_from_move','move_date < date','move_date_month','move_date_week',
