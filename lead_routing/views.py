@@ -189,7 +189,6 @@ def preprocess_df(df):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
-print(os.getcwd())
 def get_pred(data):
     cols = ['id','date','region','postal_code','country','region2','postal_code2','country2',
                      'distance','move_from_type','move_to_type','move_size','move_date','interstate',
@@ -227,6 +226,7 @@ def get_pred(data):
     df_pred = preprocess_df(df)
     pid = df_pred['ping_partner_id'][0]
     payout = float(df_pred['ping_payout'][0])
+    print(os.getcwd())
 
     try:
         model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
