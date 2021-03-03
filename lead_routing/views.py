@@ -189,7 +189,7 @@ def preprocess_df(df):
 
 @api_view(["POST"])
 @permission_classes((IsAuthenticated,))
-print(str(os.getcwd()))
+print(os.getcwd())
 def get_pred(data):
     cols = ['id','date','region','postal_code','country','region2','postal_code2','country2',
                      'distance','move_from_type','move_to_type','move_size','move_date','interstate',
