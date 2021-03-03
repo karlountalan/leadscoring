@@ -227,7 +227,6 @@ def get_pred(data):
     pid = df_pred['ping_partner_id'][0]
     payout = float(df_pred['ping_payout'][0])
     from django.conf import settings
-    print(settings.SITE_ROOT)
 
     try:
         model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
