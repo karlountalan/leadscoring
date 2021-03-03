@@ -19,5 +19,5 @@ from lead_routing import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('routelead/',views.get_pred)
+    path('',views.get_pred)
 ]
