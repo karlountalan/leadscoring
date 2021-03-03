@@ -226,12 +226,11 @@ def get_pred(data):
     df_pred = preprocess_df(df)
     pid = df_pred['ping_partner_id'][0]
     payout = float(df_pred['ping_payout'][0])
-    from django.conf import settings
 
     try:
-        model = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
+        model = joblib.load(settings.BASE_DIR+'/models/model_'+str(pid)+'.pkl')
     except Exception as E:
-        return JsonResponse({'estimated_payout':str(settings.BASE_DIR)}, safe=True)
+        return JsonResponse({'estimated_payout':payout}, safe=True)
 
     feats = ['region','move_from_type','move_to_type','move_size','interstate','form_post_attempts','user_id',
                   'distance','days_away_from_move','move_date < date','move_date_month','move_date_week',
@@ -240,12 +239,12 @@ def get_pred(data):
     cat_feat = ['region','move_from_type','move_to_type','move_size','user_id','page_url','move_date_month',
                 'move_date_week']
     for n in cat_feat:
-        globals()[n] = joblib.load(os.getcwd()+'/objects/'+str(pid)+'/'+str(n)+'.pkl')
+        globals()[n] = joblib.load(settings.BASE_DIR+'/objects/'+str(pid)+'/'+str(n)+'.pkl')
         globals()[n] = [str(i) for i in globals()[n]]
         df_pred[n] = df_pred[n].apply(lambda x: str(x) if str(x) in globals()[n] else 'others')
     x = df_pred[feats]
     x = pd.get_dummies(columns=cat_feat,drop_first=False, data=x)
-    train_cols = joblib.load(os.getcwd()+'/objects/'+str(pid)+'/columns.pkl')
+    train_cols = joblib.load(settings.BASE_DIR+'/objects/'+str(pid)+'/columns.pkl')
     missing_cols = set(train_cols) - set(x.columns)
     for c in missing_cols:
         x[c] = 0
@@ -260,9 +259,9 @@ def get_pred(data):
 
 
 # def load_dfs(in_id):
-#     df_leads = pd.read_csv(os.getcwd()+"/source_data/moving_leads (4).csv")
-#     df_pings = pd.read_csv(os.getcwd()+"/source_data/ping_attempts.csv")
-#     #df_posts = pd.read_csv(os.getcwd()+"/source_data/post_attempts (1).csv")
+#     df_leads = pd.read_csv(settings.BASE_DIR+"/source_data/moving_leads (4).csv")
+#     df_pings = pd.read_csv(settings.BASE_DIR+"/source_data/ping_attempts.csv")
+#     #df_posts = pd.read_csv(settings.BASE_DIR+"/source_data/post_attempts (1).csv")
 #     #df_posts['date'] = pd.to_datetime(df_posts['date'])
 #     df_leads['date'] = pd.to_datetime(df_leads['date'])
 #     df_leads = df_leads[df_leads['id'].isin(in_id)].reset_index(drop=True)
@@ -319,7 +318,7 @@ def get_pred(data):
 #
 #
 #
-#     files = [f for f in listdir(os.getcwd()+'/models/') if isfile(join(os.getcwd()+'/models/', f))]
+#     files = [f for f in listdir(settings.BASE_DIR+'/models/') if isfile(join(settings.BASE_DIR+'/models/', f))]
 #     files = [f for f in files if 'model' in f]
 #     files = [f for f in files if 'score' not in f]
 #     #pids = [int(f.split('_')[1].split('.')[0]) for f in files]
@@ -335,9 +334,9 @@ def get_pred(data):
 #     for pid in pids:
 #         df_id = df_pred2[df_pred2['ping_post_partner_id']==pid]
 #         try:
-#             globals()['pipe_'+str(pid)] = joblib.load(os.getcwd()+'/models/model_'+str(pid)+'.pkl')
+#             globals()['pipe_'+str(pid)] = joblib.load(settings.BASE_DIR+'/models/model_'+str(pid)+'.pkl')
 #             for n in cat_feat:
-#                 globals()[n+'_'+str(pid)] = joblib.load(os.getcwd()+'/objects/'+str(pid)+'/'+str(n)+'.pkl')
+#                 globals()[n+'_'+str(pid)] = joblib.load(settings.BASE_DIR+'/objects/'+str(pid)+'/'+str(n)+'.pkl')
 #                 globals()[n+'_'+str(pid)] = [str(i) for i in globals()[n+'_'+str(pid)]]
 #                 df_id[n] = df_id[n].apply(lambda x: str(x) if str(x) in globals()[n+'_'+str(pid)] else 'others')
 #         except Exception as E:
@@ -360,7 +359,7 @@ def get_pred(data):
 #             pipe = globals()['pipe_'+str(pid)]
 #             x = df_id[feats]
 #             x = pd.get_dummies(columns=cat_feat,drop_first=False, data=x)
-#             train_cols = joblib.load(os.getcwd()+'/objects/'+str(pid)+'/columns.pkl')
+#             train_cols = joblib.load(settings.BASE_DIR+'/objects/'+str(pid)+'/columns.pkl')
 #             missing_cols = set(train_cols) - set(x.columns)
 #             for c in missing_cols:
 #                 x[c] = 0
@@ -407,7 +406,7 @@ def get_pred(data):
 #     try:
 #         height=json.loads(heightdata.body)
 #         weight=str(height*10)
-#         print(os.getcwd())
+#         print(settings.BASE_DIR)
 #
 #         return JsonResponse("Ideal weight should be:"+weight+" kg",safe=False)
 #     except ValueError as e:
