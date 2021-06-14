@@ -227,15 +227,14 @@ def get_pred(data):
     df_pred = preprocess_df(df)
     pid = df_pred['ping_partner_id'][0]
     payout = float(df_pred['ping_payout'][0])
-    return JsonResponse({'estimated_payout':'pid'}, safe=True)
 
     try:
-        if pid==25:
+        if int(pid)==25:
             return JsonResponse({'estimated_payout': round((payout*.90),2)}, safe=True)
         else:
             model = joblib.load(proj_dir+'/models/model_'+str(pid)+'.pkl')
     except Exception as E:
-        return JsonResponse({'estimated_payout':'pid'}, safe=True)
+        return JsonResponse({'estimated_payout':payout}, safe=True)
 
     feats = ['region','move_from_type','move_to_type','move_size','interstate','form_post_attempts','user_id',
                   'distance','days_away_from_move','move_date < date','move_date_month','move_date_week',
